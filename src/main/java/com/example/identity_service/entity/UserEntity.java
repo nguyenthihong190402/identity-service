@@ -2,26 +2,15 @@ package com.example.identity_service.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import java.util.Set;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-@Data
 @Entity
 @Getter
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-public class UserEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
+public class UserEntity extends BaseEntity{
     @Column(nullable = false)
     private String fullName;
 
@@ -31,17 +20,22 @@ public class UserEntity{
     @Column(nullable = false)
     private String password;
 
-    @CreationTimestamp
-    @Column(updatable = false, name = "created_at")
-    private Date createdAt;
+    @Column(name = "status",nullable = true)
+    private Byte status;
 
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private Date updatedAt;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<RoleEntity> roles;
 
-    public UserEntity(String fullName, String username, String password) {
-        this.fullName = fullName;
-        this.username = username;
-        this.password = password;
+    public Set<RoleEntity> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<RoleEntity> roles) {
+        this.roles = roles;
     }
 }

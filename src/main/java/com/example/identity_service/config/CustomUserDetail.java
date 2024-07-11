@@ -4,16 +4,25 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 @Component
 public class CustomUserDetail implements UserDetails {
     private  String username;
     private  String password;
-    private List<GrantedAuthority> authorities;
-
+    public Set<GrantedAuthority> authorities;
+//    @Autowired
+//    private UserRepository userRepository;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+//        UserEntity user = userRepository.findByUsername(username);
+//        authorities = new HashSet<>();
+//        for (RoleEntity role : user.getRoles()) {
+//            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+//            for (PermissionEntity permission : role.getPermissions()) {
+//                authorities.add(new SimpleGrantedAuthority(permission.getName()));
+//            }
+//        }
         return authorities;
     }
 
@@ -25,25 +34,5 @@ public class CustomUserDetail implements UserDetails {
     @Override
     public String getUsername() {
         return username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }
